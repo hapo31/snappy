@@ -13,8 +13,13 @@ namespace DnDScreenCapture.Service
     using Point = System.Drawing.Point;
     class ScreenCaptureByRectangle
     {
-        private Rect targetRect;
+        private Rectangle targetRect;
         public ScreenCaptureByRectangle(Rect target)
+        {
+            this.targetRect = new Rectangle((int)target.Left, (int)target.Bottom, (int)target.Width, (int)target.Height);
+        }
+
+        public ScreenCaptureByRectangle(Rectangle target)
         {
             this.targetRect = target;
         }
@@ -23,8 +28,8 @@ namespace DnDScreenCapture.Service
         {
             Bitmap bitmap = new Bitmap((int)targetRect.Width, (int)targetRect.Height);
             Graphics g = Graphics.FromImage(bitmap);
-            g.CopyFromScreen(new Point(0, 0),
-                            new Point(0, 0),
+            g.CopyFromScreen(new Point((int)targetRect.Left, (int)targetRect.Top),
+                            new Point((int)targetRect.Right, (int)targetRect.Bottom),
                             bitmap.Size);
 
             g.Dispose();

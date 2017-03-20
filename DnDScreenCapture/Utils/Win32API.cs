@@ -21,9 +21,9 @@ namespace DnDScreenCapture.Utils
 
             public int Height { get { return bottom - top; } }
 
-            public System.Windows.Rect Rect
+            public System.Drawing.Rectangle Rectangle
             {
-                get { return new System.Windows.Rect(left, top, Width, Height); }
+                get { return new System.Drawing.Rectangle(left, top, Width, Height); }
             }
         }
 
