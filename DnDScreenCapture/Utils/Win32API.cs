@@ -39,6 +39,9 @@ namespace DnDScreenCapture.Utils
         public static extern IntPtr GetForegroundWindow();
 
         [DllImport("user32.dll")]
+        public static extern IntPtr GetDC(IntPtr hwnd);
+
+        [DllImport("user32.dll")]
         public static extern bool GetClientRect(IntPtr hwnd, out RECT rect);
 
         [DllImport("user32.dll")]

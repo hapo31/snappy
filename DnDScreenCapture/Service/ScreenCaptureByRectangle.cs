@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Drawing.Imaging;
+using DnDScreenCapture.Utils;
+using System.Windows.Forms;
 
 namespace DnDScreenCapture.Service
 {
@@ -26,14 +28,34 @@ namespace DnDScreenCapture.Service
 
         public Bitmap capture()
         {
-            Bitmap bitmap = new Bitmap((int)targetRect.Width, (int)targetRect.Height);
-            Graphics g = Graphics.FromImage(bitmap);
-            g.CopyFromScreen(new Point((int)targetRect.Left, (int)targetRect.Top),
-                            new Point((int)targetRect.Right, (int)targetRect.Bottom),
-                            bitmap.Size);
-
+            var bitmap = new Bitmap((int)targetRect.Width, (int)targetRect.Height);
+            var g = Graphics.FromImage(bitmap);
+            g.CopyFromScreen(0, 0, 0, 0, bitmap.Size);
             g.Dispose();
             return bitmap;
+        }
+
+        public Bitmap capture(IntPtr Hwnd)
+        {
+            var bitmap = new Bitmap((int)targetRect.Width, (int)targetRect.Height);
+            var g = Graphics.FromImage(bitmap);
+            g.CopyFromScreen(0, 0, 0, 0, bitmap.Size);
+            
+            g.Dispose();
+            return bitmap;
+        }
+
+        public static Bitmap[] CaptureAllScreen()
+        {
+            return Screen.AllScreens.Select(s =>
+            {
+                var bmp = new Bitmap(s.Bounds.Width, s.Bounds.Height);
+                var g = Graphics.FromImage(bmp);
+                //g.CopyFromScreen(s.Bounds.Left, s.Bounds.Top, s.Bounds.Width, s.Bounds.Height, bmp.Size, CopyPixelOperation.PatCopy);
+                g.CopyFromScreen(0, 0, 0, 0, bmp.Size, CopyPixelOperation.CaptureBlt);
+                g.Dispose();
+                return bmp;
+            }).ToArray();
         }
     }
 }

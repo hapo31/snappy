@@ -94,7 +94,7 @@
                         VerticalAlignment="Top" HorizontalAlignment="Right" Width="18">
                 <Button Content="r" Style="{StaticResource CaptionButtonStyleKey}" Click="Close_Click" />
             </StackPanel>
-            <Grid Opacity="0.5" Background="Gray"/>
+            <Grid Opacity="0.5" Background="Gray" />
             <Image Opacity="1.0" Source="{Binding ImageSrc}" Width="{Binding RelativeSource={RelativeSource Self}, Path=Source.PixelWidth}" Height="{Binding RelativeSource={RelativeSource Self}, Path=Source.PixelHeight}"/>
         </Grid>
     </Border>

@@ -26,9 +26,15 @@ namespace DnDScreenCapture.ViewModel
             IntPtr a = Win32API.GetForegroundWindow();
             var targetRect = new Win32API.RECT();
             Win32API.GetClientRect(a, out targetRect);
-            //var sc = new ScreenCaptureByRectangle(targetRect.Rectangle);
-            var sc = new ScreenCaptureByRectangle(new Rectangle(-400, 400, 1200, 1200));
+            var sc = new ScreenCaptureByRectangle(targetRect.Rectangle);
             ImageSrc = sc.capture().GetBitmapFrame();
+
+            int i = 0;
+            ScreenCaptureByRectangle.CaptureAllScreen().ToList().ForEach(b =>
+            {
+                b.Save($"cap_{i}.bmp");
+                ++i;
+            });
         }
 
         private BitmapFrame imageSrc;
@@ -50,14 +56,6 @@ namespace DnDScreenCapture.ViewModel
         } = new Point(-1, -1);
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-
-        public void OnClickButton()
-        {
-            var sc = new ScreenCaptureByRectangle(new System.Windows.Rect(-100, -220, 200, 200));
-            ImageSrc = sc.capture().GetBitmapFrame();
-        }
-
 
         public void StartDrag(Point position)
         {

@@ -36,11 +36,6 @@ namespace DnDScreenCapture
             vm.Initialized();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            this.vm.OnClickButton();
-        }
-
         private void Close_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
