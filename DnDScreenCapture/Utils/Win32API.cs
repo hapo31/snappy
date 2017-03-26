@@ -34,6 +34,16 @@ namespace DnDScreenCapture.Utils
             public long y;
         }
 
+        [StructLayout(LayoutKind.Sequential)]
+        public struct MONITORINFOEX
+        {
+            public uint cbSize;
+            public RECT rcMonitor;
+            public RECT rcWork;
+            public uint dwFlags;
+            public string szDevice;
+        }
+
 
         [DllImport("user32.dll")]
         public static extern IntPtr GetForegroundWindow();
@@ -50,6 +60,34 @@ namespace DnDScreenCapture.Utils
         [DllImport("user32.dll")]
         public static extern bool ClientToScreen(IntPtr hwnd, out Point result);
 
-        //EnumMonitorFunc
+        [DllImport("user32.dll")]
+        public static extern bool PrintWindow(IntPtr hwnd, IntPtr hdcBlt, int nFlag);
+
+        const int MONITOR_DEFAULTTONULL = 0x00000000;
+        const int MONITOR_DEFAULTTOPRIMARY = 0x00000001;
+        const int MONITOR_DEFAULTTONEAREST = 0x00000002;
+
+        [DllImport("user32.dll", CharSet=CharSet.Unicode)]
+        public static extern IntPtr MonitorFromWindow(IntPtr hwnd, uint dwFlags = MONITOR_DEFAULTTONEAREST);
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+        public static extern int GetMonitorInfo(IntPtr hMonitor, out MONITORINFOEX lpmi);
+        
+        public static MONITORINFOEX GetMonitorInfomation(IntPtr hwnd)
+        {
+            var result = new MONITORINFOEX();
+            var hmonitor = MonitorFromWindow(hwnd);
+            var a = GetMonitorInfo(hmonitor, out result);
+            if (a != 0)
+            {
+                return result;
+            }
+            else
+            {
+                throw new InvalidOperationException();
+            }
+            
+        }
+
     }
 }

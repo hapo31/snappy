@@ -49,8 +49,10 @@ namespace DnDScreenCapture.Service
         {
             return Screen.AllScreens.Select(s =>
             {
+                
                 var bmp = new Bitmap(s.Bounds.Width, s.Bounds.Height);
                 var g = Graphics.FromImage(bmp);
+                
                 //g.CopyFromScreen(s.Bounds.Left, s.Bounds.Top, s.Bounds.Width, s.Bounds.Height, bmp.Size, CopyPixelOperation.PatCopy);
                 g.CopyFromScreen(0, 0, 0, 0, bmp.Size, CopyPixelOperation.CaptureBlt);
                 g.Dispose();

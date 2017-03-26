@@ -56,6 +56,8 @@ namespace DnDScreenCapture
 
         }
 
+        const int WM_PRINT = 0x0317;
+        const int WM_PRINTCLIENT = 0x0318;
         const int WM_SYSCOMMAND = 0x0112;
         const int SC_MOVE = 0xF010;
         const int SC_MASK = 0xFFF0;
@@ -68,10 +70,21 @@ namespace DnDScreenCapture
 
         private static IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
-            if ((msg == WM_SYSCOMMAND) && ((wParam.ToInt32() & SC_MASK) == SC_MOVE))
+            switch(msg)
             {
-                handled = true;
+                case WM_SYSCOMMAND:
+                    if((wParam.ToInt32() & SC_MASK) == SC_MOVE)
+                    { 
+                        handled = true;
+                    }
+                    break;
+
+                case WM_PRINT:
+                case WM_PRINTCLIENT:
+
+                    break;
             }
+
             return IntPtr.Zero;
         }
     }
