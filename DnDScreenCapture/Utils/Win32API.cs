@@ -71,14 +71,14 @@ namespace DnDScreenCapture.Utils
         public static extern IntPtr MonitorFromWindow(IntPtr hwnd, uint dwFlags = MONITOR_DEFAULTTONEAREST);
 
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-        public static extern int GetMonitorInfo(IntPtr hMonitor, out MONITORINFOEX lpmi);
+        public static extern bool GetMonitorInfo(IntPtr hMonitor, out MONITORINFOEX lpmi);
         
         public static MONITORINFOEX GetMonitorInfomation(IntPtr hwnd)
         {
             var result = new MONITORINFOEX();
             var hmonitor = MonitorFromWindow(hwnd);
-            var a = GetMonitorInfo(hmonitor, out result);
-            if (a != 0)
+
+            if (GetMonitorInfo(hmonitor, out result))
             {
                 return result;
             }
