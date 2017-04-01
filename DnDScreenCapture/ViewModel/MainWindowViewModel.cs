@@ -25,7 +25,7 @@ namespace DnDScreenCapture.ViewModel
             // 雑に最前面ウインドウを撮影する
             IntPtr a = Win32API.GetForegroundWindow();
             var targetRect = new Win32API.RECT();
-            var monitor = Win32API.GetMonitorInfomation(a);
+            //var monitor = Win32API.GetMonitorInfomation(a);
 
             Win32API.GetClientRect(a, out targetRect);
             var sc = new ScreenCaptureByRectangle(targetRect.Rectangle);
