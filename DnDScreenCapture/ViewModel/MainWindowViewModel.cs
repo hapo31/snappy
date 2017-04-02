@@ -27,9 +27,16 @@ namespace DnDScreenCapture.ViewModel
             var targetRect = new Win32API.RECT();
             //var monitor = Win32API.GetMonitorInfomation(a);
 
-            Win32API.GetClientRect(a, out targetRect);
+            Win32API.GetWindowRect(a, out targetRect);
             var sc = new ScreenCaptureByRectangle(targetRect.Rectangle);
+            var windowText = new StringBuilder(128);
+
+            Win32API.GetWindowText(a, windowText, windowText.Capacity);
+
+            Console.WriteLine($"TargetWindow: [{windowText.ToString()}]({targetRect.Width},{targetRect.Height})");
+
             ImageSrc = sc.capture().GetBitmapFrame();
+            ScreenSize = targetRect.Rectangle;
 
             int i = 0;
             ScreenCaptureByRectangle.CaptureAllScreen().ToList().ForEach(b =>
@@ -52,21 +59,36 @@ namespace DnDScreenCapture.ViewModel
             }
         }
 
+        private Rectangle screenSize;
+        public Rectangle ScreenSize
+        {
+            get
+            {
+                return screenSize;
+            }
+            set
+            {
+                screenSize = value;
+                PropertyChanged.Notice(this);
+            }
+        }
+
+        private String tweetText;
+        public String TweetText
+        {
+            get { return tweetText; }
+            set
+            {
+                tweetText = value;
+                PropertyChanged.Notice(this);
+            }
+        }
+
         private Point StartClickPoint
         {
             get; set;
         } = new Point(-1, -1);
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-        public void StartDrag(Point position)
-        {
-
-        }
-
-        public void EndDrag(Point start, Point end)
-        {
-
-        }
     }
 }

@@ -64,8 +64,8 @@ namespace DnDScreenCapture
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            HwndSource source = HwndSource.FromHwnd(new WindowInteropHelper(this).Handle);
-            source.AddHook(new HwndSourceHook(WndProc));
+            //HwndSource source = HwndSource.FromHwnd(new WindowInteropHelper(this).Handle);
+            //source.AddHook(new HwndSourceHook(WndProc));
         }
 
         private static IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)

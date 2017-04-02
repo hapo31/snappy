@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:DnDScreenCapture"
         mc:Ignorable="d"
         Loaded="Window_Loaded"
-        WindowState="Maximized"
         ResizeMode="NoResize"
         Topmost="True"
         Title="MainWindow"
@@ -15,8 +14,8 @@
         MouseDown="Window_MouseDown"
         MouseUp="Window_MouseUp"
         MouseMove="Window_MouseMove"
-        Width="{x:Static SystemParameters.PrimaryScreenWidth}"
-        Height="{x:Static SystemParameters.PrimaryScreenHeight}"
+        Width="{Binding ScreenSize.Width}"
+        Height="{Binding ScreenSize.Height}"
         Background="Transparent" AllowsTransparency="True">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="{x:Static SystemParameters.CaptionHeight}"
@@ -96,6 +95,7 @@
             </StackPanel>
             <Grid Opacity="0.5" Background="Gray" />
             <Image Opacity="1.0" Source="{Binding ImageSrc}" Width="{Binding RelativeSource={RelativeSource Self}, Path=Source.PixelWidth}" Height="{Binding RelativeSource={RelativeSource Self}, Path=Source.PixelHeight}"/>
+            <TextBox FontSize="18" TextWrapping="Wrap" VerticalAlignment="Bottom" Height="120" Text="{Binding Mode=OneWayToSource, Path=TweetText}"/>
         </Grid>
     </Border>
 </Window>
