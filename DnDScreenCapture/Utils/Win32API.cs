@@ -12,14 +12,14 @@ namespace DnDScreenCapture.Utils
         [StructLayout(LayoutKind.Sequential)]
         public struct RECT
         {
-            public int top;
             public int left;
+            public int top;
             public int right;
             public int bottom;
 
-            public int Width { get { return right - left; } }
+            public int Width { get { return Math.Abs(right - left); } }
 
-            public int Height { get { return bottom - top; } }
+            public int Height { get { return Math.Abs(bottom - top); } }
 
             public System.Drawing.Rectangle Rectangle
             {
@@ -52,8 +52,8 @@ namespace DnDScreenCapture.Utils
         public static extern IntPtr GetDC(IntPtr hwnd);
 
         [DllImport("user32.dll")]
-        public static extern bool GetClientRect(IntPtr hwnd, out RECT rect);
-
+        public static extern bool GetWindowRect(IntPtr hwnd, out RECT rect);
+       
         [DllImport("user32.dll")]
         public static extern int GetWindowText(IntPtr hwnd, StringBuilder lpString, int nMaxCount);
 
