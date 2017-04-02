@@ -30,17 +30,7 @@ namespace DnDScreenCapture.Service
         {
             var bitmap = new Bitmap((int)targetRect.Width, (int)targetRect.Height);
             var g = Graphics.FromImage(bitmap);
-            g.CopyFromScreen(0, 0, 0, 0, bitmap.Size);
-            g.Dispose();
-            return bitmap;
-        }
-
-        public Bitmap capture(IntPtr Hwnd)
-        {
-            var bitmap = new Bitmap((int)targetRect.Width, (int)targetRect.Height);
-            var g = Graphics.FromImage(bitmap);
-            g.CopyFromScreen(0, 0, 0, 0, bitmap.Size);
-            
+            g.CopyFromScreen(targetRect.Left, targetRect.Top, 0, 0, bitmap.Size);
             g.Dispose();
             return bitmap;
         }
