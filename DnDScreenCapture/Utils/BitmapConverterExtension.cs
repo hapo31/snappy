@@ -17,7 +17,7 @@ namespace DnDScreenCapture.Utils
         /// </summary>
         /// <param name="bmp">Bitmapクラスのインスタンス</param>
         /// <returns>MemorySteamオブジェクトのインスタンス</returns>
-        public static MemoryStream GetMemorySteam(this Bitmap bmp)
+        public static MemoryStream GetMemoryStream(this Bitmap bmp)
         {
             var ms = new MemoryStream();
             bmp.Save(ms, ImageFormat.Bmp);
@@ -31,7 +31,7 @@ namespace DnDScreenCapture.Utils
         /// <returns>BitmapFrameオブジェクトのインスタンス</returns>
         public static BitmapFrame GetBitmapFrame(this Bitmap bmp)
         {
-            using (var ms = bmp.GetMemorySteam())
+            using (var ms = bmp.GetMemoryStream())
             {
                 return BitmapFrame.Create(ms, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
             }
