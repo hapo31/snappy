@@ -95,8 +95,10 @@
             </StackPanel>
             <Grid Opacity="0.5" Background="Gray" />
             <Image Opacity="1.0" Source="{Binding ImageSrc}" Width="{Binding RelativeSource={RelativeSource Self}, Path=Source.PixelWidth}" Height="{Binding RelativeSource={RelativeSource Self}, Path=Source.PixelHeight}"/>
-            <TextBox FontSize="18" TextWrapping="Wrap" VerticalAlignment="Bottom" Height="120" Text="{Binding Mode=OneWayToSource, Path=TweetText}" Margin="0,0,51,0"/>
-            <Button FontFamily="@MeiryoUI" Content="Send" Margin="717,415,0,0"/>
+            <Grid VerticalAlignment="Bottom" Height="119" >
+                <TextBox FontSize="18" TextWrapping="Wrap"  Height="120" Text="{Binding Mode=OneWayToSource, Path=TweetText}" Margin="0,0,40,0" />
+                <Button Width="40" FontFamily="@MeiryoUI" Content="Send" Margin="728,0,0,-1" RenderTransformOrigin="0.5,0.5" />
+            </Grid>
         </Grid>
     </Border>
 </Window>
