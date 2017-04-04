@@ -15,7 +15,7 @@
         MouseUp="Window_MouseUp"
         MouseMove="Window_MouseMove"
         Width="{Binding ScreenSize.Width}"
-        Height="{Binding ScreenSize.Height}"
+        Height="{Binding ScreenSize.Height + 200}"
         Background="Transparent" AllowsTransparency="True">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="{x:Static SystemParameters.CaptionHeight}"
@@ -86,19 +86,19 @@
             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         </Style>
     </Window.Resources>
-    <Border >
+    <Border>
         <Grid>
             <StackPanel Panel.ZIndex="100" Orientation="Horizontal" Margin="0,10,10,0"
                         Opacity="1.0"
                         VerticalAlignment="Top" HorizontalAlignment="Right" Width="18">
                 <Button Content="r" Style="{StaticResource CaptionButtonStyleKey}" Click="Close_Click" />
             </StackPanel>
-            <Grid Opacity="0.5" Background="Gray" />
-            <Image Opacity="1.0" Source="{Binding ImageSrc}" Width="{Binding RelativeSource={RelativeSource Self}, Path=Source.PixelWidth}" Height="{Binding RelativeSource={RelativeSource Self}, Path=Source.PixelHeight}"/>
-            <Grid VerticalAlignment="Bottom" Height="119" >
-                <TextBox FontSize="18" TextWrapping="Wrap"  Height="120" Text="{Binding Mode=OneWayToSource, Path=TweetText}" Margin="0,0,40,0" />
-                <Button Width="40" FontFamily="@MeiryoUI" Content="Send" Margin="728,0,0,-1" RenderTransformOrigin="0.5,0.5" />
-            </Grid>
+            <Grid Opacity="0.5" Background="Gray"/>
+            <Image Opacity="1.0" Source="{Binding ImageSrc}" Width="{Binding RelativeSource={RelativeSource Self}, Path=Source.PixelWidth}" Height="{Binding RelativeSource={RelativeSource Self}, Path=Source.PixelHeight}" />
+            <StackPanel VerticalAlignment="Bottom" Height="120" >
+                <TextBox FontSize="18" TextWrapping="Wrap"  Height="80" Text="{Binding Mode=OneWayToSource, Path=TweetText}"/>
+                <Button FontFamily="MeiryoUI" Content="Send" Height="40"  />
+            </StackPanel>
         </Grid>
     </Border>
 </Window>
