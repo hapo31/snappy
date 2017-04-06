@@ -7,6 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DnDScreenCapture", "DnDScre
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8CC1F17C-2B6A-47B0-9F5C-A5489A4FC14E}"
 	ProjectSection(SolutionItems) = preProject
+		DnDScreenCapture\.gitignore = DnDScreenCapture\.gitignore
 		readme.md = readme.md
 	EndProjectSection
 EndProject

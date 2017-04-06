@@ -10,6 +10,7 @@ using CoreTweet.Core;
 using System.Xml.Serialization;
 using DnDScreenCapture.Model;
 using DnDScreenCapture.Service;
+using System.Text;
 
 namespace DnDScreenCapture
 {
@@ -22,10 +23,19 @@ namespace DnDScreenCapture
         public static void Main()
         {
             App app = new App();
-            var twitter = new Twitter();
 
+            var con = DnDScreenCapture.Properties.Resources.ConsumerKey;
+            var cons = DnDScreenCapture.Properties.Resources.ConsumerSecret;
+
+            var twitter = new Twitter(con, cons);
+
+            if (!twitter.LoadToken("token.xml"))
             {
                 app.StartupUri = new Uri("View/OAuthWindow.xaml");
+            }
+            else
+            {
+
             }
             app.InitializeComponent();
             app.Run();

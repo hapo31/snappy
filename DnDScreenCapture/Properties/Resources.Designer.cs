@@ -61,7 +61,7 @@ namespace DnDScreenCapture.Properties {
         }
         
         /// <summary>
-        ///   yyzxVjhABr1tOnhHGGd13XMKu に類似しているローカライズされた文字列を検索します。
+        ///   dMNuhHfUhAxcqGqAlRos2NLop に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string ConsumerKey {
             get {
@@ -70,7 +70,7 @@ namespace DnDScreenCapture.Properties {
         }
         
         /// <summary>
-        ///   PvuMIIYX3NO2fkJDjSTf87aVyn0C5NP8evnm1f6N7JU1vpZY38 に類似しているローカライズされた文字列を検索します。
+        ///   m6TQESndZcsYRogx8oH7KIvIS068xSTs0Y7G5pHDDHN5Q7yHKU に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string ConsumerSecret {
             get {
