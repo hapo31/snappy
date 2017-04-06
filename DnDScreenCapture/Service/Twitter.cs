@@ -2,6 +2,7 @@
 using System.Xml.Serialization;
 
 using CoreTweet;
+using System;
 
 namespace DnDScreenCapture.Service
 {
@@ -56,6 +57,12 @@ namespace DnDScreenCapture.Service
             }
 
             return true;
+        }
+
+        public Uri GetOAuthUri()
+        {
+            session = CoreTweet.OAuth.Authorize(ConsumerKey, ConsumerSecret);
+            return session.AuthorizeUri;
         }
 
         public bool SaveToken(string filename)
