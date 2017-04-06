@@ -5,9 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DnDScreenCapture.View"
         mc:Ignorable="d"
-        Title="認証" Height="300" Width="300">
+        Title="認証" Height="600" Width="300">
     <Grid>
-        <WebBrowser/>
-
+        <WebBrowser Source="{Binding OAuthUrl}"/>
     </Grid>
 </Window>

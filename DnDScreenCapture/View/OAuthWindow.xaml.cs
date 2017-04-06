@@ -19,7 +19,7 @@ namespace DnDScreenCapture.View
     /// </summary>
     public partial class OAuthWindow : Window
     {
-        public OAuthWindow()
+        public OAuthWindow(string OAuthToken)
         {
             InitializeComponent();
         }

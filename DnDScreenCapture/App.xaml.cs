@@ -6,6 +6,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
+using CoreTweet.Core;
+using System.Xml.Serialization;
+using DnDScreenCapture.Model;
+using DnDScreenCapture.Service;
+
 namespace DnDScreenCapture
 {
     /// <summary>
@@ -13,5 +18,17 @@ namespace DnDScreenCapture
     /// </summary>
     public partial class App : Application
     {
+        [STAThread]
+        public static void Main()
+        {
+            App app = new App();
+            var twitter = new Twitter();
+
+            {
+                app.StartupUri = new Uri("View/OAuthWindow.xaml");
+            }
+            app.InitializeComponent();
+            app.Run();
+        }
     }
 }
