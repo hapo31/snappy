@@ -85,6 +85,7 @@
     <Compile Include="Utils\PropertyChangedEventHandlerExtension.cs" />
     <Compile Include="Service\ScreenCaptureByRectangle.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="ViewModel\OAuthWindowViewModel.cs" />
     <Compile Include="View\OAuthWindow.xaml.cs">
       <DependentUpon>OAuthWindow.xaml</DependentUpon>
     </Compile>

@@ -31,7 +31,9 @@ namespace DnDScreenCapture
 
             if (!twitter.LoadToken("token.xml"))
             {
-                app.StartupUri = new Uri("View/OAuthWindow.xaml");
+                Uri oauthUri = twitter.GetOAuthUri();
+                var oauth = new View.OAuthWindow(oauthUri);
+                oauth.ShowDialog();
             }
             else
             {

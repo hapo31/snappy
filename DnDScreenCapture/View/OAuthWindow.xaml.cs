@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DnDScreenCapture.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +20,12 @@ namespace DnDScreenCapture.View
     /// </summary>
     public partial class OAuthWindow : Window
     {
-        public OAuthWindow(string OAuthToken)
+        public OAuthWindow(Uri oauthUri)
         {
             InitializeComponent();
+            var vm = new OAuthWindowViewModel();
+            this.DataContext = vm;
+            vm.Initialized(oauthUri);
         }
     }
 }
