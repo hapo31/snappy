@@ -61,6 +61,15 @@ namespace DnDScreenCapture.Properties {
         }
         
         /// <summary>
+        ///   snpy://callback.com に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string CallbackScheme {
+            get {
+                return ResourceManager.GetString("CallbackScheme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   dMNuhHfUhAxcqGqAlRos2NLop に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string ConsumerKey {
