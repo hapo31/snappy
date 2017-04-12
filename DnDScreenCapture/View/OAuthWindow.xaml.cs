@@ -24,6 +24,7 @@ namespace DnDScreenCapture.View
         {
             InitializeComponent();
             var vm = new OAuthWindowViewModel();
+            this.OAuthBrowser.Source = oauthUri;
             this.DataContext = vm;
             vm.Initialized(oauthUri);
         }

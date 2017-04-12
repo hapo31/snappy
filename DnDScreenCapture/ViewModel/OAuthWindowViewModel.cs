@@ -16,10 +16,10 @@ namespace DnDScreenCapture.ViewModel
 
         public Uri OAuthUri
         {
-            get { return this.oauthUri; }
+            get { return oauthUri; }
             set
             {
-                this.oauthUri = value;
+                oauthUri = value;
                 PropertyChanged.Notice(this);
             }
         }
