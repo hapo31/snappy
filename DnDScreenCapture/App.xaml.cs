@@ -31,8 +31,14 @@ namespace DnDScreenCapture
 
             if (!twitter.LoadToken("token.xml"))
             {
-                Uri oauthUri = twitter.GetOAuthUri();
+                Uri oauthUri = twitter.GetOAuthUri(DnDScreenCapture.Properties.Resources.CallbackScheme);
                 var oauth = new View.OAuthWindow(oauthUri);
+                oauth.oauthCallbackHandler += async (e) =>
+                {
+                    var tokens = await twitter.GetTokensByVerifierAsync(e.Verifier);
+                    twitter.SaveToken("token.xml", tokens);
+                    oauth.Close();
+                };
                 oauth.ShowDialog();
             }
             else
