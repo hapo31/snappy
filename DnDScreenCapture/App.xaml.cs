@@ -11,6 +11,7 @@ using System.Xml.Serialization;
 using DnDScreenCapture.Model;
 using DnDScreenCapture.Service;
 using System.Text;
+using DnDScreenCapture.View;
 
 namespace DnDScreenCapture
 {
@@ -19,31 +20,27 @@ namespace DnDScreenCapture
     /// </summary>
     public partial class App : Application
     {
+
+        public ApplicationSetting applicationSetting { get; set; }
+
+        App()
+        {
+            this.applicationSetting = new ApplicationSetting();
+            var con = DnDScreenCapture.Properties.Resources.ConsumerKey;
+            var cons = DnDScreenCapture.Properties.Resources.ConsumerSecret;
+
+            applicationSetting.twitterSetting = new Twitter(con, cons);
+        }
+
         [STAThread]
         public static void Main()
         {
             App app = new App();
-
-            var con = DnDScreenCapture.Properties.Resources.ConsumerKey;
-            var cons = DnDScreenCapture.Properties.Resources.ConsumerSecret;
-
-            var twitter = new Twitter(con, cons);
-
-            if (!twitter.LoadToken("token.xml"))
+            if (!app.applicationSetting.twitterSetting.LoadToken("token.xml"))
             {
-                Uri oauthUri = twitter.GetOAuthUri(DnDScreenCapture.Properties.Resources.CallbackScheme);
-                var oauth = new View.OAuthWindow(oauthUri);
-                oauth.oauthCallbackHandler += async (e) =>
-                {
-                    var tokens = await twitter.GetTokensByVerifierAsync(e.Verifier);
-                    twitter.SaveToken("token.xml", tokens);
-                    oauth.Close();
-                };
-                oauth.ShowDialog();
-            }
-            else
-            {
-
+                // 設定ウインドウを開く
+                var settingWindow = new SettingWindow(app.applicationSetting.twitterSetting);
+                settingWindow.ShowDialog();
             }
             app.InitializeComponent();
             app.Run();

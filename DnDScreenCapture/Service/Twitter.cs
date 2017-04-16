@@ -79,7 +79,7 @@ namespace DnDScreenCapture.Service
         /// </summary>
         /// <param name="callbackUrl">コールバックURL</param>
         /// <returns></returns>
-        public Uri GetOAuthUri(string callbackUrl)
+        public Uri GetOAuthUri(string callbackUrl = "oob")
         {
             session = CoreTweet.OAuth.Authorize(ConsumerKey, ConsumerSecret, callbackUrl);
             return session.AuthorizeUri;

@@ -28,18 +28,15 @@ namespace DnDScreenCapture.View
             OAuthBrowser.Navigating += (sender, obj) =>
             {
                 var url = obj.Uri.ToString();
-                Console.WriteLine($"navigation:{url}");
                 if(url.IndexOf(Properties.Resources.CallbackScheme) >= 0)
                 {
                     var token = url.Substring(url.IndexOf("?oauth_token=") + 13, 27);
                     var verifier = url.Substring(url.IndexOf("&oauth_verifier=") + 16);
-                    Console.WriteLine($"token:{token} verifier:{verifier}");
                     oauthCallbackHandler?.Invoke(new OAuthCallbackEventArgs(token, verifier));
                 }
 
             };
-            //new System.Windows.Navigation.NavigatingCancelEventHandler()
-            this.DataContext = vm;
+            DataContext = vm;
             vm.Initialized(oauthUri);
         }
         
