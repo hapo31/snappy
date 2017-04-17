@@ -13,6 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+using DnDScreenCapture.ViewModel;
+
 namespace DnDScreenCapture.View
 {
     /// <summary>
@@ -20,26 +22,18 @@ namespace DnDScreenCapture.View
     /// </summary>
     public partial class SettingWindow : Window
     {
-        private Twitter twitterInfo;
+        private SettingWindowViewModel viewModel;
 
         public SettingWindow(Twitter twitterInfo)
         {
-
-            this.twitterInfo = twitterInfo;
+            viewModel = new SettingWindowViewModel(twitterInfo);
+            DataContext = viewModel;
             InitializeComponent();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Uri oauthUri = twitterInfo.GetOAuthUri(DnDScreenCapture.Properties.Resources.CallbackScheme);
-            var oauth = new View.OAuthWindow(oauthUri);
-            oauth.oauthCallbackHandler += async (oauthResult) =>
-            {
-                var tokens = await twitterInfo.GetTokensByVerifierAsync(oauthResult.Verifier);
-                twitterInfo.SaveToken("token.xml", tokens);
-                oauth.Close();
-            };
-            oauth.ShowDialog();
+            viewModel.OpenOAuthWindow();
         }
     }
 }

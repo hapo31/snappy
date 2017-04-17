@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\ApplicationSetting.cs" />
+    <Compile Include="ViewModel\SettingWindowViewModel.cs" />
     <Compile Include="View\SettingWindow.xaml.cs">
       <DependentUpon>SettingWindow.xaml</DependentUpon>
     </Compile>
