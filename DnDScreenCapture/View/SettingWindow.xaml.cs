@@ -24,10 +24,11 @@ namespace DnDScreenCapture.View
     {
         private SettingWindowViewModel viewModel;
 
-        public SettingWindow(Twitter twitterInfo)
+        public SettingWindow()
         {
-            viewModel = new SettingWindowViewModel(twitterInfo);
+            viewModel = new SettingWindowViewModel();
             DataContext = viewModel;
+            viewModel.LoadProfile();
             InitializeComponent();
         }
 

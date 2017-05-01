@@ -1,4 +1,5 @@
-﻿using DnDScreenCapture.ViewModel;
+﻿using DnDScreenCapture.Service;
+using DnDScreenCapture.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -86,6 +87,20 @@ namespace DnDScreenCapture.View
             }
 
             return IntPtr.Zero;
+        }
+
+        private async void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Visibility = Visibility.Hidden;
+            Console.WriteLine("ButtonClicked");
+            if(await vm.UpdateStatus())
+            {
+                Close();
+            }
+            else
+            {
+                Visibility = Visibility.Visible;
+            }
         }
     }
 }

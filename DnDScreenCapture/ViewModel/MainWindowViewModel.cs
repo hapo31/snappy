@@ -10,6 +10,8 @@ using DnDScreenCapture.Utils;
 using DnDScreenCapture.Service;
 using System.IO;
 using System.Windows.Media.Imaging;
+using System.Windows;
+using DnDScreenCapture.View;
 
 namespace DnDScreenCapture.ViewModel
 {
@@ -35,16 +37,100 @@ namespace DnDScreenCapture.ViewModel
 
             Console.WriteLine($"TargetWindow: [{windowText.ToString()}]({targetRect.Width},{targetRect.Height})");
 
-            ImageSrc = sc.capture().GetBitmapFrame();
+            DataSrc = sc.capture();
+            ImageSrc = DataSrc.GetBitmapFrame();
             ScreenSize = targetRect.Rectangle;
-
-            int i = 0;
-            ScreenCaptureByRectangle.CaptureAllScreen().ToList().ForEach(b =>
-            {
-                b.Save($"cap_{i}.bmp");
-                ++i;
-            });
         }
+
+        public async Task<bool> UpdateStatus()
+        {
+            Console.WriteLine("UpdateStatus()");
+            try
+            {
+                SendButtonEnabled = false;
+                var twitter = App.applicationSetting.Twitter;
+                var isAuthorized = false;
+
+                // 認証が必要かどうか見て認証ウインドウを開く
+                if (twitter.AuthorizationRequired)
+                {
+                    Console.WriteLine("Authorize require.");
+                    var oauth = new OAuthWindow(twitter.GetOAuthUri(DnDScreenCapture.Properties.Resources.CallbackScheme));
+                    oauth.oauthCallbackHandler += async oauthResult =>
+                    {
+                        
+                        if (oauthResult.Verified)
+                        {
+                            // トークン保存
+                            // この処理いくつかの箇所で同じこと書いてあるから共通化したい
+                            var tokens = await twitter.GetTokensByVerifierAsync(oauthResult.Verifier);
+                            // ファイル名も
+                            twitter.SaveToken("token.xml", tokens);
+                            isAuthorized = true;
+                        }
+                        else
+                        {
+                            // ウインドウのバッテン押されるか認証してもらえなかったらダイアログを出す
+                            MessageBox.Show("認証に失敗しました…。");
+                            isAuthorized = false;
+                        }
+                    };
+                    // いきなり飛ばすと行儀悪いかなと思ったので確認ダイアログを出す
+                    var ans = MessageBox.Show("Twitterへ投稿するには認証する必要があります。認証しますか？", "認証確認", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                    if (ans == MessageBoxResult.Yes)
+                    {
+                        MessageBox.Show("OAuth認証のため、oauth.twitter.comをWebViewで開きます。準備はよろしいですね？", "確認");
+                        oauth.ShowDialog();
+                    }
+                    else
+                    {
+                        // しないならいいや
+                        return false;
+                    }
+                }
+                else
+                {
+                    isAuthorized = true;
+                }
+                if (isAuthorized)
+                {
+                    Console.WriteLine("Upload start...");
+                    var upload = new MediaUploader(twitter);
+                    var data = upload.ConvertToPNGBytes(DataSrc);
+                    using (var f = new FileStream("____uploadtempfile.png", FileMode.Create))
+                    {
+                        data.WriteTo(f);
+                    }
+                    var id = await upload.MediaUpload(new FileStream("____uploadtempfile.png", FileMode.Open));
+                    
+                    Console.Write($"media id:{id.MediaId}");
+                    var s = await twitter.Token.Statuses.UpdateAsync(
+                            status: TweetText,
+                            media_ids: new long[] { id.MediaId }
+                        );
+
+                    Console.WriteLine($"Upload result: {s.Id}");
+                    File.Delete("____uploadtempfile.png");
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+            finally
+            {
+                SendButtonEnabled = true;
+                Console.WriteLine("operation exit.");
+            }
+        }
+
+        public Bitmap DataSrc;
 
         private BitmapFrame imageSrc;
         public BitmapFrame ImageSrc {
@@ -88,6 +174,17 @@ namespace DnDScreenCapture.ViewModel
         {
             get; set;
         } = new Point(-1, -1);
+
+        private bool sendButtonEnabled = true;
+        public bool SendButtonEnabled
+        {
+            get { return sendButtonEnabled; }
+            set
+            {
+                sendButtonEnabled = value;
+                PropertyChanged.Notice(this);
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
     }

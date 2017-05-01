@@ -21,27 +21,26 @@ namespace DnDScreenCapture
     public partial class App : Application
     {
 
-        public ApplicationSetting applicationSetting { get; set; }
+        static public ApplicationSetting applicationSetting { get; set; }
 
         App()
         {
-            this.applicationSetting = new ApplicationSetting();
+            applicationSetting = new ApplicationSetting();
             var con = DnDScreenCapture.Properties.Resources.ConsumerKey;
             var cons = DnDScreenCapture.Properties.Resources.ConsumerSecret;
 
-            applicationSetting.twitterSetting = new Twitter(con, cons);
+            applicationSetting.Twitter = new Twitter(con, cons);
         }
 
         [STAThread]
         public static void Main()
         {
             App app = new App();
-            if (!app.applicationSetting.twitterSetting.LoadToken("token.xml"))
-            {
-                // 設定ウインドウを開く
-                var settingWindow = new SettingWindow(app.applicationSetting.twitterSetting);
-                settingWindow.ShowDialog();
-            }
+            App.applicationSetting.Twitter.LoadToken("token.xml");
+            Console.WriteLine(applicationSetting.Twitter.Token.ScreenName);
+            // 設定ウインドウを開く
+            //var settingWindow = new SettingWindow();
+            //settingWindow.ShowDialog();
             app.InitializeComponent();
             app.Run();
         }

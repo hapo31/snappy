@@ -9,7 +9,7 @@ namespace DnDScreenCapture.Model
 {
     public class ApplicationSetting
     {
-        public Twitter twitterSetting;
+        public Twitter Twitter;
 
     }
 }

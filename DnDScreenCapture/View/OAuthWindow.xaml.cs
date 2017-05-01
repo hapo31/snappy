@@ -30,6 +30,7 @@ namespace DnDScreenCapture.View
                 var url = obj.Uri.ToString();
                 if(url.IndexOf(Properties.Resources.CallbackScheme) >= 0)
                 {
+                    this.Visibility = Visibility.Hidden;
                     var token = url.Substring(url.IndexOf("?oauth_token=") + 13, 27);
                     var verifier = url.Substring(url.IndexOf("&oauth_verifier=") + 16);
                     oauthCallbackHandler?.Invoke(new OAuthCallbackEventArgs(token, verifier));
@@ -45,6 +46,13 @@ namespace DnDScreenCapture.View
         public delegate void OAuthCallbackHandler(OAuthCallbackEventArgs ev);
         public class OAuthCallbackEventArgs: EventArgs
         {
+            public bool Verified
+            {
+                get
+                {
+                    return Token != null && Verifier?.Length > 0;
+                }
+            }
             public string Token { get; set; }
             public string Verifier { get; set; }
             public OAuthCallbackEventArgs(string token, string verifier)
@@ -52,6 +60,11 @@ namespace DnDScreenCapture.View
                 Token = token;
                 Verifier = verifier;
             }
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            oauthCallbackHandler?.Invoke(new OAuthCallbackEventArgs(null, null));
         }
     }
 }

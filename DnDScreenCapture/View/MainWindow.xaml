@@ -97,7 +97,7 @@
             <Image Opacity="1.0" Source="{Binding ImageSrc}" Width="{Binding RelativeSource={RelativeSource Self}, Path=Source.PixelWidth}" Height="{Binding RelativeSource={RelativeSource Self}, Path=Source.PixelHeight}" />
             <StackPanel VerticalAlignment="Bottom" Height="120" >
                 <TextBox FontSize="18" TextWrapping="Wrap"  Height="80" Text="{Binding Mode=OneWayToSource, Path=TweetText}"/>
-                <Button FontFamily="MeiryoUI" Content="Send" Height="40"  />
+                <Button IsEnabled="{Binding SendButtonEnabled}" Click="Button_Click" FontFamily="MeiryoUI" Content="Send" Height="40"  />
             </StackPanel>
         </Grid>
     </Border>
