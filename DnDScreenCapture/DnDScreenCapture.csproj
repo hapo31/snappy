@@ -79,6 +79,7 @@
   <ItemGroup>
     <Compile Include="Model\ApplicationSetting.cs" />
     <Compile Include="Service\MediaUploader.cs" />
+    <Compile Include="Service\WindowInfo.cs" />
     <Compile Include="ViewModel\SettingWindowViewModel.cs" />
     <Compile Include="View\SettingWindow.xaml.cs">
       <DependentUpon>SettingWindow.xaml</DependentUpon>

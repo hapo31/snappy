@@ -26,20 +26,12 @@ namespace DnDScreenCapture.ViewModel
         {
             // 雑に最前面ウインドウを撮影する
             IntPtr a = Win32API.GetForegroundWindow();
-            var targetRect = new Win32API.RECT();
-            //var monitor = Win32API.GetMonitorInfomation(a);
-
-            Win32API.GetWindowRect(a, out targetRect);
-            var sc = new ScreenCaptureByRectangle(targetRect.Rectangle);
-            var windowText = new StringBuilder(128);
-
-            Win32API.GetWindowText(a, windowText, windowText.Capacity);
-
-            Console.WriteLine($"TargetWindow: [{windowText.ToString()}]({targetRect.Width},{targetRect.Height})");
-
+            var target = new WindowInfo(a);
+            var sc = new ScreenCaptureByRectangle(target.WinodwRect);
+            
             DataSrc = sc.capture();
             ImageSrc = DataSrc.GetBitmapFrame();
-            ScreenSize = targetRect.Rectangle;
+            ScreenSize = target.WinodwRect;
         }
 
         public async Task<bool> UpdateStatus()
@@ -57,8 +49,7 @@ namespace DnDScreenCapture.ViewModel
                     Console.WriteLine("Authorize require.");
                     var oauth = new OAuthWindow(twitter.GetOAuthUri(DnDScreenCapture.Properties.Resources.CallbackScheme));
                     oauth.oauthCallbackHandler += async oauthResult =>
-                    {
-                        
+                    {                        
                         if (oauthResult.Verified)
                         {
                             // トークン保存
