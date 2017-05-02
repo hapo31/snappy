@@ -35,7 +35,11 @@ namespace DnDScreenCapture.View
                     var verifier = url.Substring(url.IndexOf("&oauth_verifier=") + 16);
                     oauthCallbackHandler?.Invoke(new OAuthCallbackEventArgs(token, verifier));
                 }
-
+                else
+                {
+                    // 認証失敗？
+                    oauthCallbackHandler?.Invoke(new OAuthCallbackEventArgs(null, null));
+                }
             };
             DataContext = vm;
             vm.Initialized(oauthUri);
