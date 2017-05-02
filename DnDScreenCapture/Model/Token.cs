@@ -7,9 +7,12 @@ using System.Threading.Tasks;
 namespace DnDScreenCapture.Model
 {
     [Serializable]
-    struct Token
+    public struct Token
     {
-        string AccessToken;
-        string AccessTokenSecret;
-    }
+        [System.Xml.Serialization.XmlElement("access_token")]
+        public string AccessToken;
+
+        [System.Xml.Serialization.XmlElement("access_token_secret")]
+        public string AccessTokenSecret;
+}
 }

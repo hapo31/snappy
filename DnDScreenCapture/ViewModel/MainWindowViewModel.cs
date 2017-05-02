@@ -16,7 +16,7 @@ using DnDScreenCapture.View;
 namespace DnDScreenCapture.ViewModel
 {
     using Point = System.Windows.Point;
-    class MainWindowViewModel: INotifyPropertyChanged
+    class MainWindowViewModel : INotifyPropertyChanged
     {
         public MainWindowViewModel()
         {
@@ -28,86 +28,78 @@ namespace DnDScreenCapture.ViewModel
             IntPtr a = Win32API.GetForegroundWindow();
             var target = new WindowInfo(a);
             var sc = new ScreenCaptureByRectangle(target.WinodwRect);
-            
+
             DataSrc = sc.capture();
             ImageSrc = DataSrc.GetBitmapFrame();
             ScreenSize = target.WinodwRect;
         }
 
-        public async Task<bool> UpdateStatus()
+        public async Task UpdateStatus()
+        {
+            try
+            {
+                var twitter = App.applicationSetting.Twitter;
+                Console.WriteLine("Upload start...");
+                var upload = new MediaUploader(twitter);
+                var data = upload.ConvertToPNGBytes(DataSrc);
+                var id = await upload.MediaUpload(data);
+
+                Console.Write($"media id:{id.MediaId}");
+                var s = await twitter.Token.Statuses.UpdateAsync(
+                        status: TweetText,
+                        media_ids: new long[] { id.MediaId }
+                    );
+
+                Console.WriteLine($"Upload result: {s.Id}");
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public bool CheckOAuthRequired()
+        {
+            return App.applicationSetting.Twitter.AuthorizationRequired;
+        }
+
+        public void StartOAuth()
         {
             Console.WriteLine("UpdateStatus()");
             try
             {
                 SendButtonEnabled = false;
                 var twitter = App.applicationSetting.Twitter;
-                var isAuthorized = false;
 
-                // 認証が必要かどうか見て認証ウインドウを開く
-                if (twitter.AuthorizationRequired)
+                Console.WriteLine("Authorize require.");
+                var oauth = new OAuthWindow(twitter.GetOAuthUri(DnDScreenCapture.Properties.Resources.CallbackScheme));
+                oauth.oauthCallbackHandler += async oauthResult =>
                 {
-                    Console.WriteLine("Authorize require.");
-                    var oauth = new OAuthWindow(twitter.GetOAuthUri(DnDScreenCapture.Properties.Resources.CallbackScheme));
-                    oauth.oauthCallbackHandler += async oauthResult =>
-                    {                        
-                        if (oauthResult.Verified)
-                        {
-                            // トークン保存
-                            // この処理いくつかの箇所で同じこと書いてあるから共通化したい
-                            var tokens = await twitter.GetTokensByVerifierAsync(oauthResult.Verifier);
-                            // ファイル名も
-                            twitter.SaveToken("token.xml", tokens);
-                            isAuthorized = true;
-                        }
-                        else
-                        {
-                            // ウインドウのバッテン押されるか認証してもらえなかったらダイアログを出す
-                            MessageBox.Show("認証に失敗しました…。");
-                            isAuthorized = false;
-                        }
-                    };
-                    // いきなり飛ばすと行儀悪いかなと思ったので確認ダイアログを出す
-                    var ans = MessageBox.Show("Twitterへ投稿するには認証する必要があります。認証しますか？", "認証確認", MessageBoxButton.YesNo, MessageBoxImage.Information);
-                    if (ans == MessageBoxResult.Yes)
+                    if (oauthResult.Verified)
                     {
-                        MessageBox.Show("OAuth認証のため、oauth.twitter.comをWebViewで開きます。準備はよろしいですね？", "確認");
-                        oauth.ShowDialog();
+                        // トークン保存
+                        // この処理いくつかの箇所で同じこと書いてあるから共通化したい
+                        var tokens = await twitter.GetTokensByVerifierAsync(oauthResult.Verifier);
+                        // ファイル名も
+                        twitter.SaveToken("token.xml", tokens);
                     }
                     else
                     {
-                        // しないならいいや
-                        return false;
+                        // ウインドウのバッテン押されるか認証してもらえなかったらダイアログを出す
+                        MessageBox.Show("認証に失敗しました…。");
                     }
-                }
-                else
+                };
+                // いきなり飛ばすと行儀悪いかなと思ったので確認ダイアログを出す
+                var ans = MessageBox.Show("Twitterへ投稿するには認証する必要があります。認証しますか？", "認証確認", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                if (ans == MessageBoxResult.Yes)
                 {
-                    isAuthorized = true;
-                }
-                if (isAuthorized)
-                {
-                    Console.WriteLine("Upload start...");
-                    var upload = new MediaUploader(twitter);
-                    var data = upload.ConvertToPNGBytes(DataSrc);
-                    var id = await upload.MediaUpload(data);
-
-                    Console.Write($"media id:{id.MediaId}");
-                    var s = await twitter.Token.Statuses.UpdateAsync(
-                            status: TweetText,
-                            media_ids: new long[] { id.MediaId }
-                        );
-
-                    Console.WriteLine($"Upload result: {s.Id}");
-                    return true;
-                }
-                else
-                {
-                    return false;
+                    MessageBox.Show("OAuth認証のため、oauth.twitter.comをWebViewで開きます。準備はよろしいですね？", "確認");
+                    oauth.ShowDialog();
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                Console.WriteLine(e.Message);
-                return false;
+                throw e;
             }
             finally
             {
@@ -119,7 +111,8 @@ namespace DnDScreenCapture.ViewModel
         public Bitmap DataSrc;
 
         private BitmapFrame imageSrc;
-        public BitmapFrame ImageSrc {
+        public BitmapFrame ImageSrc
+        {
             get
             {
                 return imageSrc;

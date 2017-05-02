@@ -20,6 +20,9 @@ namespace DnDScreenCapture.View
     /// </summary>
     public partial class OAuthWindow : Window
     {
+
+        private bool eventHandled = false;
+
         public OAuthWindow(Uri oauthUri)
         {
             InitializeComponent();
@@ -27,26 +30,33 @@ namespace DnDScreenCapture.View
             this.OAuthBrowser.Source = oauthUri;
             OAuthBrowser.Navigating += (sender, obj) =>
             {
+                eventHandled = true;
                 var url = obj.Uri.ToString();
                 if(url.IndexOf(Properties.Resources.CallbackScheme) >= 0)
                 {
-                    this.Visibility = Visibility.Hidden;
-                    var token = url.Substring(url.IndexOf("?oauth_token=") + 13, 27);
-                    var verifier = url.Substring(url.IndexOf("&oauth_verifier=") + 16);
+                    Console.WriteLine($"Url:{url}");
+
+                    var oauthTokenIndex = url.IndexOf("?oauth_token=") + 13;
+                    var token = url.Substring(oauthTokenIndex, 27);
+                    var verifierIndex = url.IndexOf("&oauth_verifier=");
+                    var verifier = url.Substring(verifierIndex + 16);
                     oauthCallbackHandler?.Invoke(new OAuthCallbackEventArgs(token, verifier));
                 }
-                else
+                else if(url.IndexOf("https://api.twitter.com/oauth/authorize") < 0)
                 {
                     // 認証失敗？
+                    Console.WriteLine($"scheme not found in '{url}'");
                     oauthCallbackHandler?.Invoke(new OAuthCallbackEventArgs(null, null));
                 }
+                // ウインドウを閉じる
+                Close();
             };
             DataContext = vm;
             vm.Initialized(oauthUri);
         }
-        
-        public event OAuthCallbackHandler oauthCallbackHandler;
 
+        public event OAuthCallbackHandler oauthCallbackHandler;
+        
         public delegate void OAuthCallbackHandler(OAuthCallbackEventArgs ev);
         public class OAuthCallbackEventArgs: EventArgs
         {
@@ -68,7 +78,11 @@ namespace DnDScreenCapture.View
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            oauthCallbackHandler?.Invoke(new OAuthCallbackEventArgs(null, null));
+            if (!eventHandled)
+            {
+                eventHandled = true;
+                oauthCallbackHandler?.Invoke(new OAuthCallbackEventArgs(null, null));
+            }
         }
     }
 }

@@ -36,11 +36,14 @@ namespace DnDScreenCapture
         public static void Main()
         {
             App app = new App();
-            App.applicationSetting.Twitter.LoadToken("token.xml");
+            try
+            {
+                App.applicationSetting.Twitter.LoadToken("token.xml");
+            }
+            catch {}
+
             Console.WriteLine(applicationSetting.Twitter.Token.ScreenName);
             // 設定ウインドウを開く
-            //var settingWindow = new SettingWindow();
-            //settingWindow.ShowDialog();
             app.InitializeComponent();
             app.Run();
         }

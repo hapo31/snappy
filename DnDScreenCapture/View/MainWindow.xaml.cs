@@ -91,16 +91,18 @@ namespace DnDScreenCapture.View
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            Visibility = Visibility.Hidden;
             Console.WriteLine("ButtonClicked");
-            if(await vm.UpdateStatus())
+            Visibility = Visibility.Hidden;
+            // OAuth認証が必要かどうかを確認する
+            if (vm.CheckOAuthRequired())
             {
-                Close();
-            }
-            else
-            {
+                // OAuth実行
+                vm.StartOAuth();
                 Visibility = Visibility.Visible;
+                return;
             }
+            await vm.UpdateStatus();
+            Close();
         }
     }
 }

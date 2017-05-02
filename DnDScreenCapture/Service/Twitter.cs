@@ -101,28 +101,27 @@ namespace DnDScreenCapture.Service
         /// <param name="filename">ファイル名</param>
         /// <param name="token">保存するトークン なければ内部で保持しているトークンを保存</param>
         /// <returns></returns>
-        public bool SaveToken(string filename, Tokens token = null)
+        public void SaveToken(string filename, Tokens token = null)
         {
             try
             {
                 using (var sw = new System.IO.StreamWriter(filename, false, new System.Text.UTF8Encoding(false)))
                 {
 
-                    var sr = new XmlSerializer(typeof(TokenData));
-                    var data = new TokenData();
+                    var sr = new XmlSerializer(typeof(Model.Token));
+                    var data = new Model.Token();
                     // トークンの取得もしくは何もしない
                     Token = token ?? Token;
-                    data.access_token = Token.AccessToken;
-                    data.access_token_secret = Token.AccessTokenSecret;
+                    data.AccessToken = Token.AccessToken;
+                    data.AccessTokenSecret = Token.AccessTokenSecret;
                     sr.Serialize(sw, data);
                 }
 
             }
-            catch
+            catch(InvalidOperationException e)
             {
-                return false;
+                throw e;
             }
-            return true;
         }
 
         /// <summary>
@@ -130,30 +129,23 @@ namespace DnDScreenCapture.Service
         /// </summary>
         /// <param name="filename">ファイル名</param>
         /// <returns></returns>
-        public bool LoadToken(string filename)
+        public void LoadToken(string filename)
         {
             try
             {
                 using (var st = new System.IO.StreamReader(filename, new System.Text.UTF8Encoding(false)))
                 {
-                    var sr = new XmlSerializer(typeof(TokenData));
-                    var data = (TokenData)sr.Deserialize(st);
+                    var sr = new XmlSerializer(typeof(Model.Token));
+                    var data = (Model.Token)sr.Deserialize(st);
 
-                    Token.AccessToken = data.access_token;
-                    Token.AccessTokenSecret = data.access_token_secret;
+                    Token.AccessToken = data.AccessToken;
+                    Token.AccessTokenSecret = data.AccessTokenSecret;
                 }
             }
-            catch
+            catch(InvalidOperationException e)
             {
-                return false;
+                throw e;
             }
-            return true;
         }
-    }
-
-    public class TokenData
-    {
-        public string access_token;
-        public string access_token_secret;
     }
 }
