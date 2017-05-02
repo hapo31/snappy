@@ -20,10 +20,16 @@ namespace DnDScreenCapture.Service
             this.twitterService = twitterService;
         }
 
+        /// <summary>
+        /// BitmapをPng形式にしてMemoryStreamを返す
+        /// </summary>
+        /// <param name="bitmap">変換前のデータが入ったBitmap</param>
+        /// <returns></returns>
         public MemoryStream ConvertToPNGBytes(Bitmap bitmap)
         {
             var mem = new MemoryStream();
             bitmap.Save(mem, ImageFormat.Png);
+            mem.Seek(0, SeekOrigin.Begin);
             return mem;
         } 
 

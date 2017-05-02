@@ -97,12 +97,8 @@ namespace DnDScreenCapture.ViewModel
                     Console.WriteLine("Upload start...");
                     var upload = new MediaUploader(twitter);
                     var data = upload.ConvertToPNGBytes(DataSrc);
-                    using (var f = new FileStream("____uploadtempfile.png", FileMode.Create))
-                    {
-                        data.WriteTo(f);
-                    }
-                    var id = await upload.MediaUpload(new FileStream("____uploadtempfile.png", FileMode.Open));
-                    
+                    var id = await upload.MediaUpload(data);
+
                     Console.Write($"media id:{id.MediaId}");
                     var s = await twitter.Token.Statuses.UpdateAsync(
                             status: TweetText,
@@ -110,7 +106,6 @@ namespace DnDScreenCapture.ViewModel
                         );
 
                     Console.WriteLine($"Upload result: {s.Id}");
-                    File.Delete("____uploadtempfile.png");
                     return true;
                 }
                 else
