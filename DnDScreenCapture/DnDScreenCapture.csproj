@@ -77,6 +77,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Utils\HotKey.cs" />
     <Compile Include="Model\ApplicationSetting.cs" />
     <Compile Include="Service\MediaUploader.cs" />
     <Compile Include="Service\WindowInfo.cs" />
